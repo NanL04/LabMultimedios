@@ -1,9 +1,31 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { obtenerUsuarios } from './firebase/firebase';
 
 function iniciarSesion( {navigation}) {
+  const [email, setEmail] = useState("");
+  const [contraseña, setContraseña] = useState("");
+  const [usuarios, setUsuarios] = useState([]);
+  useEffect(() => {
+    obtenerUsuarios().then((response) => {
+      setUsuarios(response);
+    });
+  }, []);
+  const iniciarSesion = () => {
+    let usuario = usuarios.find((usuario) => usuario.email === email);
+    if(usuario !== undefined){
+      if(usuario.contrasena === contraseña){
+        navigation.navigate("principal", {usuario: usuario.email});
+      } else {
+        alert("Contraseña incorrecta");
+      }
+    } else {
+      alert("Usuario no encontrado");
+    }
+  }
+
   return (
     <ImageBackground source={require('./assets/img_fondo.jpg')} style={styles.background}>
       <View style={styles.container}>
@@ -12,13 +34,13 @@ function iniciarSesion( {navigation}) {
         </View>
         <View style={styles.inputContainer}>
           <Icon style={styles.icon} name="mail-outline" size={30} color="#000" />
-          <TextInput style={styles.input} placeholder="Correo electrónico" placeholderTextColor="#666" />
+          <TextInput onChangeText={setEmail} style={styles.input} placeholder="Correo electrónico" placeholderTextColor="#666" />
         </View>
         <View style={styles.inputContainer}>
           <Icon style={styles.icon} name="lock-closed-outline" size={30} color="#000" />
-          <TextInput style={styles.input} placeholder="Contraseña" placeholderTextColor="#666" secureTextEntry={true} />
+          <TextInput style={styles.input} onChangeText={setContraseña} placeholder="Contraseña" placeholderTextColor="#666" secureTextEntry={true} />
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("agregarProducto")}}>
+        <TouchableOpacity style={styles.button} onPress={() => {iniciarSesion()}}>
           <Text style={styles.buttonText}>Iniciar sesión</Text>
         </TouchableOpacity>
         <View style={styles.footer}>

@@ -10,16 +10,26 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "a"
     },
     "android": {
+
+     "usesCleartextTraffic": true,
+
+     "permissions": [
+        "INTERNET"
+      ],
+      "package": "com.ucr.laboratorio_2",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
+      
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
+ 
   }
 }

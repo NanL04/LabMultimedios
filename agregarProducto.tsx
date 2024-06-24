@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import addData from "./firebase/add";
-
+import { agregarProductos } from './firebase/firebase';
 import {View, Text, TextInput, Button, TouchableOpacity} from 'react-native';
 
 function agregarProducto() {
@@ -9,15 +8,23 @@ function agregarProducto() {
   const [cantidad,setCantidad] = useState((""));
   const [caducidad,setCaducidad] = useState((""));
   const subirProducto = () => {
-    addData("productos", {nombre, codigo, cantidad, caducidad});
+    agregarProductos(nombre, codigo, cantidad, caducidad).then(() => {
+      alert("Producto subido exitosamente");
+      setNombre("");
+      setCodigo("");
+      setCantidad("");
+      setCaducidad("");
+    });
   }
+ 
   return (
     <View>
+      <Text>Registrar producto</Text>
       <TextInput onChangeText={setNombre} placeholder="Nombre" />
       <TextInput onChangeText={setCodigo} placeholder="Codigo" />
       <TextInput onChangeText={setCantidad} placeholder="Cantidad" />
       <TextInput onChangeText={setCaducidad} placeholder="Caducidad" />
-      <TouchableOpacity onPress={subirProducto}>
+      <TouchableOpacity onPress={subirProducto} >
         <Text>Subir producto</Text>
       </TouchableOpacity>
     </View>

@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {View, Text, TextInput , StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { agregarUsuario } from './firebase/firebase';
 function crearCuenta({navigation}) {
+  const [nombre,setNombre] = useState((""));
+  const [correo,setCorreo] = useState((""));
+  const [contraseña,setContraseña] = useState((""));
+  const [confirm, setConfirm] = useState((""));
+
+  const crearCuenta = () => {
+    if(contraseña === confirm){
+
+      alert("Cuenta agregada exitosamente")
+      agregarUsuario(nombre, correo, contraseña).then(() => {
+        navigation.navigate("iniciarSesion");
+      });
+    } else {
+      alert("Las contraseñas no coinciden");
+    }
+  };
+
+
   return (
     <View>
-
       <View style={styles.logoContainer}>
         <Image source={require("./assets/logo_fruit-removebg-preview.png")} style={styles.logo} />
       </View>
@@ -12,11 +30,11 @@ function crearCuenta({navigation}) {
       </View>
       <View style={styles.form}>
         <Text>Crear cuenta</Text>
-        <TextInput placeholder="Nombre" />
-        <TextInput placeholder="Correo electrónico" />
-        <TextInput placeholder="Contraseña" />
-        <TextInput placeholder="Confirmar contraseña" />
-        <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("iniciarSesion")}}>
+        <TextInput onChangeText={setNombre} placeholder="Nombre" />
+        <TextInput onChangeText={setCorreo} placeholder="Correo electrónico" />
+        <TextInput onChangeText={setContraseña} placeholder="Contraseña" />
+        <TextInput onChangeText={setConfirm} placeholder="Confirmar contraseña" />
+        <TouchableOpacity style={styles.button} onPress={() => {crearCuenta()}}>
           <Text style={styles.buttonText}>Crear cuenta</Text>
         </TouchableOpacity>
       </View >
